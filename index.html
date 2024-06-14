@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consumer Complaint Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .result pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Consumer Complaint Analysis</h1>
+    
+    <h2>Classify Complaint</h2>
+    <textarea id="singleComplaint" placeholder="Enter a single complaint"></textarea>
+    <button onclick="classifyComplaint()">Classify</button>
+    <div class="result" id="singleComplaintResult"></div>
+    
+    <h2>Analyze Multiple Complaints</h2>
+    <textarea id="multipleComplaints" placeholder="Enter multiple complaints, separated by new lines"></textarea>
+    <button onclick="analyzeComplaints()">Analyze</button>
+    <div class="result" id="multipleComplaintsResult"></div>
+
+    <script>
+        async function classifyComplaint() {
+            const complaint = document.getElementById('singleComplaint').value;
+            const response = await fetch('/classify', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ complaint: complaint })
+            });
+            const data = await response.json();
+            document.getElementById('singleComplaintResult').innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        }
+
+        async function analyzeComplaints() {
+            const complaints = document.getElementById('multipleComplaints').value.split('\n');
+            const response = await fetch('/topics', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ complaints: complaints })
+            });
+            const data = await response.json();
+            document.getElementById('multipleComplaintsResult').innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        }
+    </script>
+</body>
+</html>
