@@ -28,7 +28,7 @@ topic_names = {
 
 @app.route('/')
 def home():
-    return "Consumer Inquiry and Complaint Analysis API"
+    return send_from_directory(base_dir, 'index.html')
 
 @app.route('/classify', methods=['POST'])
 def classify_complaint():
